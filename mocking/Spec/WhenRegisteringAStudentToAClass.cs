@@ -3,7 +3,7 @@ using FluentAssertions.Execution;
 
 namespace Mocking.Spec;
 
-public class WhenCreatingAnEnrollment
+public class WhenRegisteringAStudentToAClass
 {
     #region Setup
 
@@ -12,7 +12,7 @@ public class WhenCreatingAnEnrollment
     private readonly Enrollment _enrollment;
     private readonly Student _student = new();
 
-    public WhenCreatingAnEnrollment()
+    public WhenRegisteringAStudentToAClass()
     {
         var service = new EnrollmentService(_dateTimeProvider = new MockDateTimeProvider());
 

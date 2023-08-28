@@ -1,5 +1,9 @@
 ﻿namespace Mocking;
 
+/// <remarks>
+///     This is a domain service, not an application service.
+///     It does not have any dependencies outside of the domain.
+/// </remarks>
 public class EnrollmentService
 {
     private readonly IDateTimeProvider _dateTimeProvider;
