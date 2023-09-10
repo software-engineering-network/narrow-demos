@@ -7,7 +7,7 @@ public class WhenDeactivatingProduct
     #region Requirements
 
     [Fact]
-    public void ThenProductIsDeactivated()
+    public void ThenStoredProductIsDeactivated()
     {
         var sku = "ABC123";
         var mockRepository = new MockProductRepository();
