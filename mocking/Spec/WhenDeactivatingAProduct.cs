@@ -29,13 +29,6 @@ public record Product(string Sku, string Name, bool IsDeactivated = false)
     public Product Deactivate() => this with { IsDeactivated = true };
 }
 
-public interface IProductRepository
-{
-    void Create(Product product);
-    Product Find(string sku);
-    Product Update(Product product);
-}
-
 public class CatalogService
 {
     private readonly IProductRepository _repository;
@@ -51,6 +44,13 @@ public class CatalogService
 
         _repository.Update(product.Deactivate());
     }
+}
+
+public interface IProductRepository
+{
+    void Create(Product product);
+    Product Find(string sku);
+    Product Update(Product product);
 }
 
 public class MockProductRepository : IProductRepository
