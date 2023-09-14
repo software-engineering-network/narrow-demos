@@ -33,10 +33,11 @@ public class OrderBuilder : Order.Builder
     private readonly List<CandidateLineItem> _lineItems = new();
     private IEnumerator<CandidateLineItem> _enumerator;
 
-    public override LineItem CreateLineItem()
+    public override void AddLineItem()
     {
         var (sku, price, quantity) = _enumerator.Current;
-        return new LineItem(Order.Id, sku, price, quantity);
+
+        Order.Add(sku, price, quantity);
     }
 
     public override bool HasLineItem() => _enumerator.MoveNext();

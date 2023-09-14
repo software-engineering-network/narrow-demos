@@ -10,24 +10,24 @@ public class Order : Entity
 
     public IReadOnlyList<LineItem> LineItems => _lineItems.AsReadOnly();
 
-    public void Add(LineItem lineItem)
+    public void Add(string sku, decimal price, ushort quantity)
     {
-        _lineItems.Add(lineItem);
+        _lineItems.Add(new(Id, sku, price, quantity));
     }
 
     public abstract class Builder
     {
         protected readonly Order Order = new();
 
+        public abstract void AddLineItem();
+
         public Builder Build()
         {
             while (HasLineItem())
-                Order.Add(CreateLineItem());
+                AddLineItem();
 
             return this;
         }
-
-        public abstract LineItem CreateLineItem();
 
         public Order GetOrder() => Order;
         public abstract bool HasLineItem();
