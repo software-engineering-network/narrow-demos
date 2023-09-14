@@ -13,7 +13,7 @@ public class WhenCreatingAnOrder
     public static IEnumerable<object[]> OrderServiceFactory()
     {
         yield return new[] { new OrderService(new MockOrderRepository()) };
-        yield return new[] { new OrderService(new MockOrderRepository()) };
+        yield return new[] { new Services.Factory.OrderService(new Factory.MockOrderRepository()) };
     }
 
     #endregion
