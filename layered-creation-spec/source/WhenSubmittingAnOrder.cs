@@ -8,12 +8,22 @@ namespace LayeredCreation.Spec;
 
 public class WhenCreatingAnOrder
 {
+    #region Implementation
+
+    public static IEnumerable<object[]> OrderServiceFactory()
+    {
+        yield return new[] { new OrderService(new MockOrderRepository()) };
+        yield return new[] { new OrderService(new MockOrderRepository()) };
+    }
+
+    #endregion
+
     #region Requirements
 
-    [Fact]
-    public void ThenOrderIsExpected()
+    [Theory]
+    [MemberData(nameof(OrderServiceFactory))]
+    public void ThenOrderIsExpected(IOrderService service)
     {
-        var service = new OrderService(new MockOrderRepository());
         var createOrder = new CreateOrder(
             new CandidateLineItem("ABC123", 9.99m, 3),
             new CandidateLineItem("DEF456", 19.99m, 2),
