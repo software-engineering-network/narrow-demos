@@ -3,7 +3,6 @@ using FluentAssertions.Execution;
 using LayeredCreation.Domain.Basic;
 using LayeredCreation.Services;
 using LayeredCreation.Services.Basic;
-using LineItem = LayeredCreation.Services.LineItem;
 
 namespace LayeredCreation.Spec;
 
@@ -16,9 +15,9 @@ public class WhenCreatingAnOrder
     {
         var service = new OrderService(new MockOrderRepository());
         var createOrder = new CreateOrder(
-            new LineItem("ABC123", 9.99m, 3),
-            new LineItem("DEF456", 19.99m, 2),
-            new LineItem("GHI789", 99.99m, 1)
+            new CandidateLineItem("ABC123", 9.99m, 3),
+            new CandidateLineItem("DEF456", 19.99m, 2),
+            new CandidateLineItem("GHI789", 99.99m, 1)
         );
 
         var orderId = service.Create(createOrder);
