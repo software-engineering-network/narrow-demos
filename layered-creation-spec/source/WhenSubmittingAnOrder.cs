@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using LayeredCreation.Domain.Basic;
 using LayeredCreation.Services;
 using LayeredCreation.Services.Basic;
+using LayeredCreation.Spec.Basic;
 
 namespace LayeredCreation.Spec;
 
@@ -36,13 +36,4 @@ public class WhenCreatingAnOrder
     }
 
     #endregion
-}
-
-public class MockOrderRepository : IOrderRepository
-{
-    private readonly Dictionary<Guid, Order> _orders = new();
-
-    public void Create(Order order) => _orders.Add(order.Id, order);
-
-    public Order Find(Guid id) => _orders[id];
 }
