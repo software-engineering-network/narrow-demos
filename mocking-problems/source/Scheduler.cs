@@ -7,5 +7,5 @@ public interface IScheduler
 
 public class Scheduler : IScheduler
 {
-    public Schedule Schedule(DateTime date, Employee[] employees) => new(date, new Employee[3]);
+    public Schedule Schedule(DateTime date, Employee[] employees) => new(date, employees);
 }
