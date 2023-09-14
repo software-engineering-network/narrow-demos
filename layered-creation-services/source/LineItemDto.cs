@@ -21,6 +21,16 @@ public record LineItemDto(
             source.Subtotal
         );
 
+    public static implicit operator LineItemDto(Domain.Builder.LineItem source) =>
+        new(
+            source.Id,
+            source.OrderId,
+            source.Sku,
+            source.Price,
+            source.Quantity,
+            source.Subtotal
+        );
+
     public static implicit operator LineItemDto(Domain.Factory.LineItem source) =>
         new(
             source.Id,

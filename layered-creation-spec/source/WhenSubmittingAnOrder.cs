@@ -14,6 +14,7 @@ public class WhenCreatingAnOrder
     {
         yield return new[] { new OrderService(new MockOrderRepository()) };
         yield return new[] { new Services.Factory.OrderService(new Factory.MockOrderRepository()) };
+        yield return new[] { new Services.Builder.OrderService(new Builder.MockOrderRepository()) };
     }
 
     #endregion

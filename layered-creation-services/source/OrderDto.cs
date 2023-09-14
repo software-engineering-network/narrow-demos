@@ -13,6 +13,12 @@ public record OrderDto(
             source.LineItems.Select(x => (LineItemDto) x).ToList()
         );
 
+    public static implicit operator OrderDto(Domain.Builder.Order source) =>
+        new(
+            source.Id,
+            source.LineItems.Select(x => (LineItemDto) x).ToList()
+        );
+
     public static implicit operator OrderDto(Domain.Factory.Order source) =>
         new(
             source.Id,

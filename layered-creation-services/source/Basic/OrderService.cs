@@ -11,6 +11,8 @@ public class OrderService : IOrderService
         _repository = repository;
     }
 
+    public override string ToString() => "basic order service";
+
     public Guid Create(CreateOrder command)
     {
         var order = new Order();

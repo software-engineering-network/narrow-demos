@@ -11,6 +11,8 @@ public class OrderService : IOrderService
         _repository = repository;
     }
 
+    public override string ToString() => "order service w/factory methods";
+
     public Guid Create(CreateOrder command)
     {
         var factoryMethods = command.LineItems
