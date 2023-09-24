@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\console-apps-domain\ConsoleApps.Domain.csproj" />
+    <ProjectReference Include="..\console-apps-infrastructure-in-memory\ConsoleApps.Infrastructure.InMemory.csproj" />
+  </ItemGroup>
+
+</Project>

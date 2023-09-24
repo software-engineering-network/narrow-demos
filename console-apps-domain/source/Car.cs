@@ -2,7 +2,7 @@
 
 public class Car : Aggregate
 {
-    public Car(string make, string model, uint year) : this(
+    public Car(string make, string model, ushort year) : this(
         NewGuid(),
         make,
         model,
@@ -11,7 +11,7 @@ public class Car : Aggregate
     {
     }
 
-    public Car(Guid id, string make, string model, uint year) : base(id)
+    public Car(Guid id, string make, string model, ushort year) : base(id)
     {
         Make = make;
         Model = model;
@@ -20,5 +20,5 @@ public class Car : Aggregate
 
     public string Make { get; }
     public string Model { get; }
-    public uint Year { get; }
+    public ushort Year { get; }
 }
