@@ -1,6 +1,6 @@
 ﻿namespace ConsoleApps.Domain;
 
-public class Car : Entity
+public class Car : Aggregate
 {
     public Car(string make, string model, uint year) : this(
         NewGuid(),

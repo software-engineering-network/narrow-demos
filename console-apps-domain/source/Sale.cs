@@ -1,6 +1,6 @@
 ﻿namespace ConsoleApps.Domain;
 
-public class Sale : Entity
+public class Sale : Aggregate
 {
     public Sale(Guid carId, Guid customerId, Guid dealershipId, Guid salespersonId, decimal price) : this(
         NewGuid(),

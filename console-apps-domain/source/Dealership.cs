@@ -1,6 +1,7 @@
 ﻿namespace ConsoleApps.Domain;
 
-public class Dealership : Entity
+public class Dealership : Aggregate
+
 {
     public Dealership(string name) : this(
         NewGuid(),

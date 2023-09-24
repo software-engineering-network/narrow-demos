@@ -1,6 +1,7 @@
 ﻿namespace ConsoleApps.Domain;
 
-public class Customer : Entity
+public class Customer : Aggregate
+
 {
     public Customer(string name, string surname) : this(
         NewGuid(),
