@@ -7,10 +7,10 @@ public class WhenMakingASale
 {
     #region Setup
 
+    private const decimal Price = 23999.99m;
     private readonly Car _car = new("Ford", "Mustang", 2015);
     private readonly Customer _customer = new("Joey", "Logano");
     private readonly Dealership _dealership = new("Columbus Ford");
-    private readonly decimal _price = 23999.99m;
     private readonly Sale _sale;
     private readonly Salesperson _salesperson = new("John", "Doe");
 
@@ -18,7 +18,7 @@ public class WhenMakingASale
     {
         var service = new SalesService();
 
-        _sale = service.MakeSale(_car, _customer, _dealership, _salesperson, _price);
+        _sale = service.MakeSale(_car, _customer, _dealership, _salesperson, Price);
     }
 
     #endregion
@@ -34,7 +34,7 @@ public class WhenMakingASale
         _sale.CustomerId.Should().Be(_customer.Id);
         _sale.DealershipId.Should().Be(_dealership.Id);
         _sale.SalespersonId.Should().Be(_salesperson.Id);
-        _sale.Price.Should().Be(_price);
+        _sale.Price.Should().Be(Price);
     }
 
     #endregion
