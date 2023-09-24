@@ -1,4 +1,4 @@
-﻿namespace ConsoleApps.Domain;
+﻿namespace ConsoleApps.Infrastructure.InMemory;
 
 public class Storage
 {
