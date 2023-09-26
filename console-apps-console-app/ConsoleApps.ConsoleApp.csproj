@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\console-apps-domain\ConsoleApps.Domain.csproj" />
+    <ProjectReference Include="..\console-apps-infrastructure-read\ConsoleApps.Infrastructure.Read.csproj" />
+  </ItemGroup>
+
 </Project>
