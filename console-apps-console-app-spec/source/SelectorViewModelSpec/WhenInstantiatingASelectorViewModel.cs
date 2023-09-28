@@ -2,11 +2,6 @@
 
 namespace ConsoleApps.ConsoleApp.Spec.SelectorViewModelSpec;
 
-//public class MockFetchCarHandler : Query.IHandler<FetchCars, IEnumerable<Infrastructure.Read.Car>>
-//{
-//    public IEnumerable<Infrastructure.Read.Car> Handle(FetchCars query) =>
-//}
-
 public class WhenInstantiatingASelectorViewModel
 {
     #region Setup

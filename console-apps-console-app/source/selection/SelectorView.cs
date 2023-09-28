@@ -1,28 +1,23 @@
-﻿namespace ConsoleApps.ConsoleApp;
+﻿using static System.Console;
 
-public class SelectorView<T> : IObserver<SelectorViewModel<T>>, IDisposable
+namespace ConsoleApps.ConsoleApp;
+
+public class SelectorView<T> : IView
 {
-    private readonly IDisposable _disposer;
+    private readonly SelectorViewModel<T> _vm;
 
-    public SelectorView(SelectorViewModel<T> viewModel)
+    public SelectorView(SelectorViewModel<T> vm)
     {
-        _disposer = viewModel.Subscribe(this);
+        _vm = vm;
     }
 
-    public void Dispose() => _disposer.Dispose();
-
-    public void OnCompleted() => Dispose();
-
-    public void OnError(Exception error) => throw new NotImplementedException();
-
-    public void OnNext(SelectorViewModel<T> viewModel)
+    public void Print()
     {
-        Display(viewModel.Values);
-    }
+        WriteLine("\n\n  Cars:");
 
-    private static void Display(IReadOnlyList<T> values)
-    {
-        for (var i = 0; i < values.Count; i++)
-            Console.WriteLine($"{i}. {values[i]}");
+        for (var i = 0; i < _vm.Values.Count; i++)
+            WriteLine($"    {i}. {_vm.Values[i]}");
+
+        WriteLine($"\n\n  Page {_vm.Page} of {_vm.MaxPage}");
     }
 }
