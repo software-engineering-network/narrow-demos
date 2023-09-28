@@ -3,7 +3,6 @@
 public class SelectorViewModel<T>
 {
     private const int PageSize = 10;
-    private readonly List<IObserver<SelectorViewModel<T>>> _observers = new();
     private readonly Func<IEnumerable<T>> _query;
     private readonly List<T> _values = new();
     private int _page;

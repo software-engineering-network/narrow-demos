@@ -18,6 +18,7 @@ public class SelectorView<T> : IView
         for (var i = 0; i < _vm.Values.Count; i++)
             WriteLine($"    {i}. {_vm.Values[i]}");
 
-        WriteLine($"\n\n  Page {_vm.Page} of {_vm.MaxPage}");
+        if (_vm.MaxPage > 0)
+            WriteLine($"\n\n  Page {_vm.Page} of {_vm.MaxPage}");
     }
 }

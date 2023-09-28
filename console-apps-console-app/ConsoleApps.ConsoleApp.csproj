@@ -10,6 +10,11 @@
   <ItemGroup>
     <ProjectReference Include="..\console-apps-domain\ConsoleApps.Domain.csproj" />
     <ProjectReference Include="..\console-apps-infrastructure-read\ConsoleApps.Infrastructure.Read.csproj" />
+    <ProjectReference Include="..\console-apps-services\ConsoleApps.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="autofac" Version="7.1.0" />
   </ItemGroup>
 
 </Project>

@@ -3,8 +3,6 @@ using ConsoleApps.Infrastructure.InMemory;
 
 namespace ConsoleApps.Infrastructure.Read;
 
-public record FetchCars : Query;
-
 public record Car(Guid Id, string Make, string Model, ushort Year)
 {
     public static implicit operator Car(Domain.Car source) =>
@@ -15,6 +13,8 @@ public record Car(Guid Id, string Make, string Model, ushort Year)
             source.Year
         );
 }
+
+public record FetchCars : Query;
 
 public class FetchCarsHandler : Query.IHandler<FetchCars, IEnumerable<Car>>
 {

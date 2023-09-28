@@ -2,7 +2,7 @@
 
 namespace ConsoleApps.ConsoleApp.Spec.SelectorViewModelSpec;
 
-public class WhenInstantiatingASelectorViewModel
+public class WhenInstantiating
 {
     #region Setup
 
@@ -14,7 +14,7 @@ public class WhenInstantiatingASelectorViewModel
 
     private readonly SelectorViewModel<Car> _vm;
 
-    public WhenInstantiatingASelectorViewModel()
+    public WhenInstantiating()
     {
         _vm = new SelectorViewModel<Car>(() => _cars);
     }

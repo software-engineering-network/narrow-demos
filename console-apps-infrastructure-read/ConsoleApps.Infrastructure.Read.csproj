@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\console-apps-domain\ConsoleApps.Domain.csproj" />
     <ProjectReference Include="..\console-apps-infrastructure-in-memory\ConsoleApps.Infrastructure.InMemory.csproj" />
   </ItemGroup>

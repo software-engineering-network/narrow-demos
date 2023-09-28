@@ -1,4 +1,11 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Autofac;
+using Module = ConsoleApps.ConsoleApp.Module;
 
-Console.WriteLine("Hello, World!");
-Console.ReadKey();
+var builder = new ContainerBuilder();
+builder.RegisterAssemblyModules(Module.Assemblies);
+var container = builder.Build();
+
+using var scope = container.BeginLifetimeScope();
+
+var app = scope.Resolve<App>();
+app.Run();
