@@ -23,14 +23,26 @@ public class SelectorViewModel<T> : IObservable<SelectorViewModel<T>>
             .ToList()
             .AsReadOnly();
 
-    public void NextPage() => _page++;
-    public void PreviousPage() => _page = Math.Min(0, _page - 1);
+    private int MaxPage => (int) Math.Ceiling((float) _values.Count / PageSize);
 
-    public void Refresh()
+    public SelectorViewModel<T> NextPage()
+    {
+        _page = Math.Min(MaxPage - 1, _page + 1);
+        return this;
+    }
+
+    public SelectorViewModel<T> PreviousPage()
+    {
+        _page = Math.Max(0, _page - 1);
+        return this;
+    }
+
+    public SelectorViewModel<T> Refresh()
     {
         _values.Clear();
         _values.AddRange(_query());
         _page = 0;
+        return this;
     }
 
     public T Select(int index)
