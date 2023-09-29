@@ -35,7 +35,7 @@ public class WhenMakingASelection
     [Fact]
     public void OnDifferentPage_ThenSelectionIsExpected()
     {
-        var selection = _vm.NextPage().Select(0);
+        _vm.NextPage().TrySelect(0, out var selection);
 
         selection.Should().Be(_cars.First(x => x.Model == "Camry"));
     }
@@ -43,9 +43,17 @@ public class WhenMakingASelection
     [Fact]
     public void ThenSelectionIsExpected()
     {
-        var selection = _vm.Select(0);
+        _vm.TrySelect(0, out var selection);
 
         selection.Should().Be(_cars[0]);
+    }
+
+    [Fact]
+    public void WithoutCorrespondingIndex_ThenDoNothing()
+    {
+        var isSuccessful = _vm.NextPage().TrySelect(1, out var selection);
+
+        isSuccessful.Should().BeFalse();
     }
 
     #endregion

@@ -43,12 +43,18 @@ public class SelectorViewModel<T>
         return this;
     }
 
-    public T Select(int index)
+    public bool TrySelect(int index, out T? selection)
     {
-        var selection = Values[index];
+        if (Values.Count <= index)
+        {
+            selection = default;
+            return false;
+        }
+
+        selection = Values[index];
 
         Refresh();
 
-        return selection;
+        return true;
     }
 }
