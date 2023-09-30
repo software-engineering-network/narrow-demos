@@ -67,6 +67,11 @@ public class Login : State
     {
     }
 
+    public override void OnStateEntered()
+    {
+        throw new NotImplementedException();
+    }
+
     public override void Prompt()
     {
         throw new NotImplementedException();
@@ -86,6 +91,11 @@ public class Selecting<T> : State
     {
         Views.Clear();
         Views.Add(new SelectorView<T>(_vm));
+    }
+
+    public override void OnStateEntered()
+    {
+        throw new NotImplementedException();
     }
 
     public override void Prompt()
@@ -122,16 +132,19 @@ public class Selecting<T> : State
                 case ConsoleKey.NumPad0:
                     if (_vm.TrySelect(int.Parse(key.KeyChar.ToString()), out var selection))
                     {
-                        var state = 
+                        //var state = 
                     }
 
                     break;
                 case ConsoleKey.Q:
                 case ConsoleKey.X:
                 case ConsoleKey.Escape:
+                    break;
+                case ConsoleKey.A:
                 case ConsoleKey.LeftArrow:
                     _vm.PreviousPage();
                     break;
+                case ConsoleKey.D:
                 case ConsoleKey.RightArrow:
                     _vm.NextPage();
                     break;

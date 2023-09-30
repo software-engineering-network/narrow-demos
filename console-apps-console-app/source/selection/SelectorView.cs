@@ -13,8 +13,6 @@ public class SelectorView<T> : IView
 
     public void Print()
     {
-        WriteLine("\n\n  Cars:");
-
         for (var i = 0; i < _vm.Values.Count; i++)
             WriteLine($"    {i}. {_vm.Values[i]}");
 
