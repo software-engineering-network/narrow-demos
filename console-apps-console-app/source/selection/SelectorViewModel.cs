@@ -1,60 +1,48 @@
 ﻿namespace ConsoleApps.ConsoleApp;
 
-public class SelectorViewModel<T>
+public interface IPageable<T>
+{
+    T this[int index] { get; }
+    int Count { get; }
+    int CurrentPage { get; }
+    int MaxPage { get; }
+    IReadOnlyList<T> GetValues();
+    void Load(IEnumerable<T> values);
+    void NextPage();
+    void PreviousPage();
+}
+
+public class BasicPageable<T> : IPageable<T>
 {
     private const int PageSize = 10;
-    private readonly Func<IEnumerable<T>> _query;
-    private readonly List<T> _values = new();
+    protected readonly List<T> _values = new();
     private int _page;
 
-    public SelectorViewModel(Func<IEnumerable<T>> query)
-    {
-        _query = query;
-        Refresh();
-    }
-
+    public T this[int index] => _values[index];
+    public int Count => GetValues().Count;
+    public int CurrentPage => _page + 1;
     public int MaxPage => (int) Math.Ceiling((float) _values.Count / PageSize);
-    public int Page => _page + 1;
 
-    public IReadOnlyList<T> Values =>
+    public IReadOnlyList<T> GetValues() =>
         _values
             .Skip(_page * PageSize)
             .Take(PageSize)
             .ToList()
             .AsReadOnly();
 
-    public SelectorViewModel<T> NextPage()
-    {
-        _page = Math.Min(MaxPage - 1, _page + 1);
-        return this;
-    }
-
-    public SelectorViewModel<T> PreviousPage()
-    {
-        _page = Math.Max(0, _page - 1);
-        return this;
-    }
-
-    public SelectorViewModel<T> Refresh()
+    public void Load(IEnumerable<T> values)
     {
         _values.Clear();
-        _values.AddRange(_query());
-        _page = 0;
-        return this;
+        _values.AddRange(values);
     }
 
-    public bool TrySelect(int index, out T? selection)
+    public void NextPage()
     {
-        if (Values.Count <= index)
-        {
-            selection = default;
-            return false;
-        }
+        _page = Math.Min(MaxPage - 1, _page + 1);
+    }
 
-        selection = Values[index];
-
-        Refresh();
-
-        return true;
+    public void PreviousPage()
+    {
+        _page = Math.Max(0, _page - 1);
     }
 }

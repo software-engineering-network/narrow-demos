@@ -1,6 +1,6 @@
 ﻿namespace ConsoleApps.ConsoleApp;
 
-public interface IView
+public interface IApp
 {
-    void Print();
+    void Run();
 }
