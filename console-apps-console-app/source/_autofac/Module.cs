@@ -20,5 +20,6 @@ public class Module : Autofac.Module
     {
         builder.RegisterAssemblyTypes(Assemblies).AsImplementedInterfaces();
         builder.RegisterType<App>().AsSelf();
+        builder.RegisterType<CarSeeder>().AsSelf();
     }
 }

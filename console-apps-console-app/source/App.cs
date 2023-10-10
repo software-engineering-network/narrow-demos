@@ -10,16 +10,20 @@ public class App : IApp
 {
     private readonly bool _isRunning = true;
     private readonly IPrompter _prompter;
+    private readonly CarSeeder _seeder;
     private readonly IView _view;
 
-    public App()
+    public App(CarSeeder seeder)
     {
         _view = new WelcomeView();
         _prompter = new WelcomePrompter();
+        _seeder = seeder;
     }
 
     public void Run()
     {
+        _seeder.Run();
+
         while (_isRunning)
         {
             Clear();
