@@ -61,9 +61,10 @@ public class WhenTicketsAreReserved : IClassFixture<Fixture>
 {
     #region Setup
 
+    private const int RequestedTickets = 4;
     private readonly Concert _concert;
-
     private readonly IConcertRepository _concertRepository;
+    private readonly int _originalTickets;
     private readonly Guid _reservationId;
     private readonly IReservationRepository _reservationRepository;
     private readonly ITicketReservationService _service;
@@ -74,6 +75,7 @@ public class WhenTicketsAreReserved : IClassFixture<Fixture>
 
         _service = new TicketReservationService(_concertRepository, _reservationRepository);
 
+        _originalTickets = _concertRepository.Find(_concert.Id).AvailableTickets;
         _reservationId = _service.Reserve(_concert.Id, customer.Id, 4);
     }
 
@@ -92,7 +94,7 @@ public class WhenTicketsAreReserved : IClassFixture<Fixture>
     {
         var concert = _concertRepository.Find(_concert.Id);
 
-        concert.AvailableTickets.Should().Be(1996);
+        concert.AvailableTickets.Should().Be(_originalTickets - RequestedTickets);
     }
 
     #endregion
