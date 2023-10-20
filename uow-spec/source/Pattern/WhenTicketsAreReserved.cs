@@ -1,9 +1,7 @@
 using FluentAssertions;
 using Uow.Domain;
-using Uow.Infrastructure.Clients;
 using Uow.Services;
 using Uow.Services.Pattern;
-using Customer = Uow.Domain.Customer;
 using UnitOfWork = Uow.Infrastructure.Clients.Pattern.Uow;
 
 namespace Uow.Spec.Pattern;
@@ -14,10 +12,7 @@ public class Fixture : IDisposable
 
     public Fixture()
     {
-        var clientsContext = new Context();
-        var venuesContext = new Infrastructure.Venues.Context();
-
-        Uow = new UnitOfWork(clientsContext, venuesContext);
+        Uow = new UnitOfWork();
 
         Concert = new Concert(2000);
         Uow.Concerts.Create(Concert);
@@ -78,7 +73,7 @@ public partial class WhenTicketsAreReserved : IClassFixture<Fixture>
     [Fact]
     public void ThenReservationIsCreated()
     {
-        _uow.Reservations.Exists(_reservationId).Should().BeTrue();
+        new UnitOfWork().Reservations.Exists(_reservationId).Should().BeTrue();
     }
 
     [Fact]

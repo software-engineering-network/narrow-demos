@@ -8,15 +8,17 @@ namespace Uow.Infrastructure.Clients.Pattern;
 public class Uow : IUow
 {
     private readonly Context _clientsContext;
+    private readonly TransactionScope _scope;
     private readonly Venues.Context _venuesContext;
     private IConcertRepository? _concerts;
     private ICustomerRepository? _customers;
     private IReservationRepository? _reservations;
 
-    public Uow(Context clientsContext, Venues.Context venuesContext)
+    public Uow()
     {
-        _clientsContext = clientsContext;
-        _venuesContext = venuesContext;
+        _scope = new TransactionScope();
+        _clientsContext = new();
+        _venuesContext = new();
     }
 
     public IConcertRepository Concerts => _concerts ??= new ConcertRepository(_venuesContext);
@@ -27,12 +29,10 @@ public class Uow : IUow
     {
         try
         {
-            using var scope = new TransactionScope();
-
             _clientsContext.SaveChanges();
             _venuesContext.SaveChanges();
 
-            scope.Complete();
+            _scope.Complete();
         }
         catch (Exception e)
         {

@@ -3,37 +3,38 @@ using System.Transactions;
 using Uow.Domain;
 using Uow.Infrastructure.Clients;
 using Uow.Infrastructure.Clients.Pattern;
+using Uow.Infrastructure.Venues.Naive;
 
 namespace Uow.Spec;
 
 public class UowWithBrokenConcertsRepository : IUow
 {
     private readonly Context _clientsContext;
+    private readonly TransactionScope _scope;
     private readonly Infrastructure.Venues.Context _venuesContext;
     private IConcertRepository? _concerts;
     private ICustomerRepository? _customers;
     private IReservationRepository? _reservations;
 
-    public UowWithBrokenConcertsRepository(Context clientsContext, Infrastructure.Venues.Context venuesContext)
+    public UowWithBrokenConcertsRepository()
     {
-        _clientsContext = clientsContext;
-        _venuesContext = venuesContext;
+        _scope = new TransactionScope();
+        _clientsContext = new();
+        _venuesContext = new();
     }
 
-    public IConcertRepository Concerts => _concerts ??= new BrokenConcertRepository();
+    public IConcertRepository Concerts => _concerts ??= new ConcertRepository(_venuesContext);
     public ICustomerRepository Customers => _customers ??= new CustomerRepository(_clientsContext);
-    public IReservationRepository Reservations => _reservations ??= new BrokenReservationRepository();
+    public IReservationRepository Reservations => _reservations ??= new ReservationRepository(_clientsContext);
 
     public void Commit()
     {
         try
         {
-            using var scope = new TransactionScope();
-
             _clientsContext.SaveChanges();
             _venuesContext.SaveChanges();
 
-            scope.Complete();
+            _scope.Complete();
         }
         catch (Exception e)
         {

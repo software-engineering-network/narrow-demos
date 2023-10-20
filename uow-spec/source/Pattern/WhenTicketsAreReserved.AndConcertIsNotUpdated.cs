@@ -2,6 +2,7 @@
 using Uow.Domain;
 using Uow.Services;
 using Uow.Services.Pattern;
+using UnitOfWork = Uow.Infrastructure.Clients.Pattern.Uow;
 
 namespace Uow.Spec.Pattern;
 
@@ -14,18 +15,15 @@ public partial class WhenTicketsAreReserved
         private const int RequestedTickets = 4;
         private readonly Concert _concert;
         private readonly Guid _reservationId;
-        private readonly IReservationRepository _reservationRepository;
         private readonly ITicketReservationService _service;
+        private readonly IUow _uow;
 
         public AndConcertIsNotUpdated(Fixture fixture)
         {
             (_, _concert, var customer) = fixture;
 
             _service = new TicketReservationService(
-                new UowWithBrokenConcertsRepository(
-                    new(),
-                    new()
-                )
+                new UowWithBrokenConcertsRepository()
             );
 
             _reservationId = _service.Reserve(_concert.Id, customer.Id, RequestedTickets);
@@ -38,7 +36,8 @@ public partial class WhenTicketsAreReserved
         [Fact]
         public void ThenReservationIsRolledBack()
         {
-            _reservationRepository.Exists(_reservationId).Should().BeFalse();
+            var uow = new UnitOfWork();
+            uow.Reservations.Exists(_reservationId).Should().BeFalse();
         }
 
         #endregion
