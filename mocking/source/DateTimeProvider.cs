@@ -7,9 +7,5 @@ public interface IDateTimeProvider
 
 public class MockDateTimeProvider : IDateTimeProvider
 {
-    #region IDateTimeProvider Implementation
-
     public DateTime Now => new(2023, 01, 01);
-
-    #endregion
 }

@@ -2,6 +2,8 @@ namespace Mocking.Problems;
 
 public class Schedule
 {
+    private readonly Dictionary<Shift, Employee> _assignments = new();
+
     public Schedule(DateTime date, Employee[] employees)
     {
         Date = date;
@@ -14,8 +16,6 @@ public class Schedule
             currentShift = currentShift.Next();
         }
     }
-
-    private readonly Dictionary<Shift, Employee> _assignments = new();
 
     public Employee this[Shift shift] => _assignments[shift];
 

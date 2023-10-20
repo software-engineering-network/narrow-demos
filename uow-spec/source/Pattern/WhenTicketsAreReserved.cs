@@ -1,34 +1,69 @@
 using FluentAssertions;
 using Uow.Domain;
+using Uow.Infrastructure.Clients;
+using Uow.Infrastructure.Clients.Pattern;
+using Uow.Infrastructure.Venues.Pattern;
 using Uow.Services;
 using Uow.Services.Pattern;
-using UnitOfWork = Uow.Infrastructure.Clients.Pattern.Uow;
+using Customer = Uow.Domain.Customer;
 
 namespace Uow.Spec.Pattern;
 
+public class UnitOfWork : IUnitOfWork
+{
+    public UnitOfWork(Context clientsContext, Infrastructure.Venues.Context venuesContext)
+    {
+        ClientsContext = clientsContext;
+        VenuesContext = venuesContext;
+    }
+
+    public Context ClientsContext { get; set; }
+    public Infrastructure.Venues.Context VenuesContext { get; set; }
+
+    public void Commit()
+    {
+        ClientsContext.SaveChanges();
+        VenuesContext.SaveChanges();
+    }
+}
+
 public class Fixture : IDisposable
 {
-    public IUow Uow;
+    public IConcertRepository ConcertRepository;
+    public ICustomerRepository CustomerRepository;
+    public IReservationRepository ReservationRepository;
+    public IUnitOfWork Uow;
 
     public Fixture()
     {
-        Uow = new UnitOfWork();
+        var clientsContext = new Context();
+        var venuesContext = new Infrastructure.Venues.Context();
+        Uow = new UnitOfWork(clientsContext, venuesContext);
+        ConcertRepository = new ConcertRepository(venuesContext);
+        CustomerRepository = new CustomerRepository(clientsContext);
+        ReservationRepository = new ReservationRepository(clientsContext);
 
         Concert = new Concert(2000);
-        Uow.Concerts.Create(Concert);
+        ConcertRepository.Create(Concert);
 
         Customer = new Customer("John", "Doe");
-        Uow.Customers.Create(Customer);
+        CustomerRepository.Create(Customer);
 
         Uow.Commit();
     }
 
     public void Deconstruct(
-        out IUow uow,
+        out IConcertRepository concertRepository,
+        out ICustomerRepository customerRepository,
+        out IReservationRepository reservationRepository,
+        out IUnitOfWork uow,
         out Concert concert,
         out Customer customer
     )
     {
+        concertRepository = ConcertRepository;
+        customerRepository = CustomerRepository;
+        reservationRepository = ReservationRepository;
         uow = Uow;
         concert = Concert;
         customer = Customer;
@@ -39,30 +74,32 @@ public class Fixture : IDisposable
 
     public void Dispose()
     {
-        Uow.Concerts.Delete(Concert.Id);
-        Uow.Customers.Delete(Customer.Id);
-        Uow.Reservations.DeleteAll();
+        ConcertRepository.Delete(Concert.Id);
+        CustomerRepository.Delete(Customer.Id);
+        ReservationRepository.DeleteAll();
     }
 }
 
-public partial class WhenTicketsAreReserved : IClassFixture<Fixture>
+public class WhenTicketsAreReserved : IClassFixture<Fixture>
 {
     #region Setup
 
     private const int RequestedTickets = 4;
     private readonly Concert _concert;
+    private readonly IConcertRepository _concertRepository;
     private readonly int _originalTickets;
     private readonly Guid _reservationId;
+    private readonly IReservationRepository _reservationRepository;
     private readonly ITicketReservationService _service;
-    private readonly IUow _uow;
+    private readonly IUnitOfWork _uow;
 
     public WhenTicketsAreReserved(Fixture fixture)
     {
-        (_uow, _concert, var customer) = fixture;
+        (_concertRepository, _, _reservationRepository, _uow, _concert, var customer) = fixture;
 
-        _service = new TicketReservationService(_uow);
+        _service = new TicketReservationService(_uow, _concertRepository, _reservationRepository);
 
-        _originalTickets = _uow.Concerts.Find(_concert.Id).AvailableTickets;
+        _originalTickets = _concertRepository.Find(_concert.Id).AvailableTickets;
         _reservationId = _service.Reserve(_concert.Id, customer.Id, 4);
     }
 
@@ -73,13 +110,13 @@ public partial class WhenTicketsAreReserved : IClassFixture<Fixture>
     [Fact]
     public void ThenReservationIsCreated()
     {
-        new UnitOfWork().Reservations.Exists(_reservationId).Should().BeTrue();
+        _reservationRepository.Exists(_reservationId).Should().BeTrue();
     }
 
     [Fact]
     public void ThenTicketsAvailableAreUpdated()
     {
-        var concert = _uow.Concerts.Find(_concert.Id);
+        var concert = _concertRepository.Find(_concert.Id);
 
         concert.AvailableTickets.Should().Be(_originalTickets - RequestedTickets);
     }

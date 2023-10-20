@@ -1,27 +1,47 @@
-﻿using Uow.Domain;
+﻿using System.Transactions;
+using Uow.Domain;
 
 namespace Uow.Services.Pattern;
 
 public class TicketReservationService : ITicketReservationService
 {
-    private readonly IUow _uow;
+    private readonly IConcertRepository _concertRepository;
+    private readonly IReservationRepository _reservationRepository;
+    private readonly IUnitOfWork _uow;
 
-    public TicketReservationService(IUow uow)
+    public TicketReservationService(
+        IUnitOfWork uow,
+        IConcertRepository concertRepository,
+        IReservationRepository reservationRepository
+    )
     {
         _uow = uow;
+        _concertRepository = concertRepository;
+        _reservationRepository = reservationRepository;
     }
 
     public Guid Reserve(Guid concertId, Guid customerId, int tickets)
     {
-        var reservation = new Reservation(concertId, customerId, tickets);
-        _uow.Reservations.Create(reservation);
+        TransactionManager.ImplicitDistributedTransactions = true;
 
-        var concert = _uow.Concerts.Find(concertId);
+        using var scope = new TransactionScope();
+
+        var reservation = new Reservation(concertId, customerId, tickets);
+        _reservationRepository.Create(reservation);
+
+        var concert = _concertRepository.Find(concertId);
         concert.ReserveTickets(4);
-        _uow.Concerts.Update(concert);
+        _concertRepository.Update(concert);
 
         _uow.Commit();
 
+        scope.Complete();
+
         return reservation.Id;
     }
+}
+
+public interface IUnitOfWork
+{
+    void Commit();
 }
