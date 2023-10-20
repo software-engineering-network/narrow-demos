@@ -24,6 +24,7 @@ public class Reservation : Entity
 public interface IReservationRepository
 {
     void Create(Reservation reservation);
+    void Delete(Guid id);
     void DeleteAll();
     bool Exists(Guid id);
 }

@@ -17,6 +17,13 @@ public class ReservationRepository : IReservationRepository
         _context.SaveChanges();
     }
 
+    public void Delete(Guid id)
+    {
+        var reservation = _context.Reservation.Find(id);
+        _context.Reservation.Remove(reservation);
+        _context.SaveChanges();
+    }
+
     public void DeleteAll()
     {
         foreach (var reservation in _context.Reservation)

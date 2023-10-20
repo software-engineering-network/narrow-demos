@@ -57,7 +57,7 @@ public class Fixture : IDisposable
     }
 }
 
-public class WhenTicketsAreReserved : IClassFixture<Fixture>
+public partial class WhenTicketsAreReserved : IClassFixture<Fixture>
 {
     #region Setup
 

@@ -18,12 +18,29 @@ public class TicketReservationService : ITicketReservationService
 
     public Guid Reserve(Guid concertId, Guid customerId, int tickets)
     {
-        var reservation = new Reservation(concertId, customerId, tickets);
-        _reservationRepository.Create(reservation);
+        Reservation reservation;
 
-        var concert = _concertRepository.Find(concertId);
-        concert.ReserveTickets(4);
-        _concertRepository.Update(concert);
+        try
+        {
+            reservation = new Reservation(concertId, customerId, tickets);
+            _reservationRepository.Create(reservation);
+        }
+        catch (Exception e)
+        {
+            return Guid.Empty;
+        }
+
+        try
+        {
+            var concert = _concertRepository.Find(concertId);
+            concert.ReserveTickets(4);
+            _concertRepository.Update(concert);
+        }
+        catch (Exception e)
+        {
+            _reservationRepository.Delete(reservation.Id);
+            return Guid.Empty;
+        }
 
         return reservation.Id;
     }
