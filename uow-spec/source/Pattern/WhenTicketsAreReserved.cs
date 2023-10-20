@@ -9,24 +9,6 @@ using Customer = Uow.Domain.Customer;
 
 namespace Uow.Spec.Pattern;
 
-public class UnitOfWork : IUnitOfWork
-{
-    public UnitOfWork(Context clientsContext, Infrastructure.Venues.Context venuesContext)
-    {
-        ClientsContext = clientsContext;
-        VenuesContext = venuesContext;
-    }
-
-    public Context ClientsContext { get; set; }
-    public Infrastructure.Venues.Context VenuesContext { get; set; }
-
-    public void Commit()
-    {
-        ClientsContext.SaveChanges();
-        VenuesContext.SaveChanges();
-    }
-}
-
 public class Fixture : IDisposable
 {
     public IConcertRepository ConcertRepository;
@@ -77,10 +59,11 @@ public class Fixture : IDisposable
         ConcertRepository.Delete(Concert.Id);
         CustomerRepository.Delete(Customer.Id);
         ReservationRepository.DeleteAll();
+        Uow.Commit();
     }
 }
 
-public class WhenTicketsAreReserved : IClassFixture<Fixture>
+public partial class WhenTicketsAreReserved : IClassFixture<Fixture>
 {
     #region Setup
 

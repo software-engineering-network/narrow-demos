@@ -1,4 +1,5 @@
-﻿using System.Transactions;
+﻿using System.Diagnostics;
+using System.Transactions;
 using Uow.Domain;
 
 namespace Uow.Services.Pattern;
@@ -24,20 +25,31 @@ public class TicketReservationService : ITicketReservationService
     {
         TransactionManager.ImplicitDistributedTransactions = true;
 
-        using var scope = new TransactionScope();
+        try
+        {
+            using var scope = new TransactionScope();
 
-        var reservation = new Reservation(concertId, customerId, tickets);
-        _reservationRepository.Create(reservation);
+            var reservation = new Reservation(concertId, customerId, tickets);
+            _reservationRepository.Create(reservation);
 
-        var concert = _concertRepository.Find(concertId);
-        concert.ReserveTickets(4);
-        _concertRepository.Update(concert);
+            _uow.Commit();
 
-        _uow.Commit();
+            var concert = _concertRepository.Find(concertId);
+            concert.ReserveTickets(4);
+            _concertRepository.Update(concert);
 
-        scope.Complete();
+            _uow.Commit();
 
-        return reservation.Id;
+            scope.Complete();
+
+            return reservation.Id;
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e);
+        }
+
+        return Guid.Empty;
     }
 }
 
