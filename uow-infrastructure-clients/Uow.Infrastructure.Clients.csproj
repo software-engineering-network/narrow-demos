@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\uow-domain\Uow.Domain.csproj" />
+    <ProjectReference Include="..\uow-infrastructure-venues\Uow.Infrastructure.Venues.csproj" />
   </ItemGroup>
 
   <ItemGroup>

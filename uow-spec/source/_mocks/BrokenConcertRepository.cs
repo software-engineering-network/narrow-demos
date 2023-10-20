@@ -1,6 +1,6 @@
 ﻿using Uow.Domain;
 
-namespace Uow.Spec.Naive;
+namespace Uow.Spec;
 
 public class BrokenConcertRepository : IConcertRepository
 {

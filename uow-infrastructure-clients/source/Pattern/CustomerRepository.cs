@@ -1,6 +1,6 @@
 ﻿using Uow.Domain;
 
-namespace Uow.Infrastructure.Clients.Naive;
+namespace Uow.Infrastructure.Clients.Pattern;
 
 public class CustomerRepository : ICustomerRepository
 {
@@ -14,13 +14,11 @@ public class CustomerRepository : ICustomerRepository
     public void Create(Domain.Customer customer)
     {
         _context.Customer.Add(customer);
-        _context.SaveChanges();
     }
 
     public void Delete(Guid id)
     {
         var customer = _context.Customer.Find(id);
         _context.Customer.Remove(customer);
-        _context.SaveChanges();
     }
 }
